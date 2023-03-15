@@ -20,6 +20,14 @@ const REG_DIFFERENCE = /^\s*Difference:/;
 const MDASH = '\u2014';
 const CIRCLE = '●';
 
+const createUsageLabel = (usage) => {
+  const usageLabel = usage && usage.length ?
+    ` (${usage.map((stat) => `${stat.value} ${stat.unit}`).join(', ')})` :
+    '';
+
+  return usageLabel;
+};
+
 class LineWriter {
   constructor (logger, root) {
     this.counter = 0;
@@ -167,6 +175,7 @@ class LineWriter {
   formatFailureMessage (message, showInternalStackTraces) {
     const [firstLine, ...lines] = message.split('\n');
     const outputLines = [];
+
     let context = '';
     const whitespace = '  ';
 
@@ -187,6 +196,7 @@ class LineWriter {
     push('');
 
     let internalsStarted = false;
+
     let isFirstTraceLine = true;
 
     for (const line of lines) {
@@ -286,10 +296,11 @@ class LineWriter {
     this.logger.error(formattedMessages);
   }
 
-  suite (isFail, dir, base) {
+  suite (isFail, dir, base, usage) {
     const label = isFail ? chalk`{reset.inverse.bold.red  FAIL }` : chalk`{reset.inverse.bold.green  PASS }`;
+    const usageLabel = createUsageLabel(usage);
 
-    this.comment(chalk`${label} {grey ${this.getPathRelativeToRoot(dir)}${path.sep}}{bold ${base}}`);
+    this.comment(chalk`${label} {grey ${this.getPathRelativeToRoot(dir)}${path.sep}}{bold ${base}}${usageLabel}`);
   }
 
   plan (count = this.counter) {

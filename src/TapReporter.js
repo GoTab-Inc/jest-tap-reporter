@@ -120,17 +120,23 @@ class TapReporter {
 
   onTestResult (test, testResult, aggregatedResults) {
     this.lastAggregatedResults = aggregatedResults;
-
     this.writer.logger.buffer();
 
-    const {testExecError, testResults, testFilePath, numFailingTests} = testResult;
+    const {testExecError, testResults, testFilePath, numFailingTests, memoryUsage} = testResult;
     const {dir, base} = path.parse(testFilePath);
     const suiteFailed = Boolean(testExecError);
+    const usage = [];
 
     if (!this.globalConfig.watch) {
       this.writer.blank();
     }
-    this.writer.suite(numFailingTests > 0 || suiteFailed, dir, base);
+    if (memoryUsage) {
+      usage.push({
+        unit: 'MB',
+        value: Math.round(memoryUsage * 1e-6)
+      });
+    }
+    this.writer.suite(numFailingTests > 0 || suiteFailed, dir, base, usage);
     this.writer.blank();
 
     // If error in test suite itself.

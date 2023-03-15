@@ -2,6 +2,7 @@ const LoggerBufferable = require('./LoggerBufferable');
 
 const getLineCount = (str) => {
   let count = 1;
+
   let pos = -1;
 
   while ((pos = str.indexOf('\n', pos + 1)) > -1) {

@@ -46,6 +46,7 @@ describe('LineWriter', () => {
 
     test('each next number increases by 1', () => {
       const writer = create();
+
       let last = writer.getNextNumber();
 
       for (let index = 0; index < 100; index++) {
