@@ -60,6 +60,7 @@ Array [
     false,
     "/jest-tap-reporter/test",
     "TapReporter.spec.js",
+    Array [],
   ],
 ]
 `;
